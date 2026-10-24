@@ -1,0 +1,38 @@
+# Monitor de queda dos sites em produção. Falha = e-mail do GitHub para o dono do repositório.
+# Público de propósito: o GitHub Actions é gratuito em repositório público com runner padrão.
+name: Monitor
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  sites:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Conferir sites
+        run: bash conferir.sh
+
+      # Em repositório público o GitHub desliga agendamentos após 60 dias sem atividade; um commit por mês evita isso.
+      - name: Manter o agendamento ativo
+        if: github.event_name == 'schedule'
+        run: |
+          if [ "$(date -u +%d%H)" = "0100" ] && [ "$(date -u +%M)" -lt 15 ]; then
+            date -u +%Y-%m-%dT%H:%MZ > ultima-renovacao.txt
+            git config user.name "monitor-sites"
+            git config user.email "monitor-sites@users.noreply.github.com"
+            git add ultima-renovacao.txt
+            git commit -m "Renovação mensal do agendamento"
+            git push
+          fi
