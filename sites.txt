@@ -1,2 +1,3 @@
 # url|texto que precisa aparecer na página
 https://bluemarlinapartments.com.br/|Blue Marlin
+https://conectahotel.com.br/|Do primeiro clique ao check-out
