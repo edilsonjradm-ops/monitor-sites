@@ -1,3 +1,5 @@
 # url|texto que precisa aparecer na página
 https://bluemarlinapartments.com.br/|Blue Marlin
 https://conectahotel.com.br/|Do site à TV do quarto
+https://funil.conectahotel.com.br/|Funil de reservas|noindex-ok
+https://app.conectahotel.com.br/app/login|conectahotel|noindex-ok
